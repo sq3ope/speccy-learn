@@ -1,6 +1,5 @@
-helloworld.tap: helloworld.asm
-	pasmo --name HelloWorld --tapbas helloworld.asm helloworld.tap
+hellosprites.tap: hellosprites.asm
+	pasmo --name hellosprites --tapbas hellosprites.asm hellosprites.tap
 
 clean:
 	rm *.tap
-
