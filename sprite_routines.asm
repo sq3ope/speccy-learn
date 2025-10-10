@@ -1,5 +1,5 @@
-attr:	
-		db      0                   ; attr of character block drawn
+frgink:
+		db      0                   ; ink colour
 
 ;--- draw frog shape routine
 ; hl = pos to draw frog shape
@@ -53,12 +53,27 @@ frgatt:
 		sra a
 		add a, $58
 		ld h, a
-		ld a, (attr) 	; fill frog shape attr
+		push de
+		ld a, (frgink)
+		ld d, a 		; D = ink colour
+		ld a, (hl)
+		and %11111000 	; clear old ink
+		or d 			; fill with new ink
 		ld (hl), a
 		inc hl 			; next character
+		ld a, (hl)
+		and %11111000 	; clear old ink
+		or d 			; fill with new ink
 		ld (hl), a
 		sbc hl, bc 		; one line up
+		ld a, (hl)
+		and %11111000 	; clear old ink
+		or d 			; fill with new ink
 		ld (hl), a
 		dec hl 			; next char left
+		ld a, (hl)
+		and %11111000 	; clear old ink
+		or d 			; fill with new ink
 		ld (hl), a
+		pop de
 		ret
