@@ -1,9 +1,9 @@
-frgink          db      0                       ; ink colour
+frgink          db      4                       ; ink colour
 
 ;--- draw frog shape routine
 ; hl = pos to draw frog shape
 ; de = ptr to frog shape
-; variable attr = attribute of frog shape
+; variable frgink = ink color of frog shape
 ; uses af,bc,hl,de
 
 drwfrg:
