@@ -21,7 +21,11 @@
                 ld      (frgink), a
                 call    drwfrg                  ; draw frog routine
 
-                call    wait_key                ; wait for key press
+                ld      hl, $4001
+scanKeysLoop:
+                call    ScanKeys                ; read keys pressed
+                ld      (hl), d                 ; print keys as dots in upper-left corner
+                jr      scanKeysLoop
 
 exit:
                 ret
