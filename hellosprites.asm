@@ -18,7 +18,7 @@
 
                 ld      de, frog_up             ; up frog shape
                 push    hl
-                call    drwfrg
+                call    drwspr                  ; draw sprite routine
                 pop     hl
 
 scanKeysLoop:
@@ -58,7 +58,7 @@ testPKey:
 drawFrog:
                 ld      de, frog_up             ; up frog shape
                 push    hl
-                call    drwfrg                  ; draw frog routine
+                call    drwspr                  ; draw sprite routine
                 pop     hl
 
                 call    sleep_100ms
@@ -73,18 +73,6 @@ exit:
                 include "keyboard.asm"
                 include "sprite_data.asm"
                 include "chessboard.asm"
-
-                ; Sleep for approximately 100 ms (assuming 3.5 MHz ZX Spectrum)
-                ; 100 ms = 1/10th second, so about 350,000 cycles
-                ; This is a rough delay loop, not frame-accurate
-
-sleep_100ms:
-                ld      bc, 5000                ; Adjust this value for timing accuracy
-.sleep_loop:
-                dec     bc
-                ld      a, b
-                or      c
-                jr      nz, .sleep_loop
-                ret
+                include "time.asm"
 
                 end     $8000
