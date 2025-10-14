@@ -26,36 +26,43 @@ scanKeysLoop:
 testQKey:
                 bit     0, d                    ; test Q key
                 jr      z, testAKey             ; if not pressed, test A key
+                push    hl                      ; save original frog position
                 ld      a, l                    ; move frog up
                 sub     %100000                 ; move up one row
                 ld      l, a
-                jr      nc, drawFrog            ; no need to change third
+                jr      nc, moveFrog            ; no need to change third
                 ld      a, h                    ; handle third wrap
                 sub     %1000                   ; move to previous third
                 ld      h, a
-                jr      drawFrog
+                jr      moveFrog
 testAKey:
                 bit     1, d                    ; test A key
                 jr      z, testOKey             ; if not pressed, test O key
+                push    hl                      ; save original frog position
                 ld      a, l                    ; move frog down
                 add     a, %100000              ; move down one row
                 ld      l, a
-                jr      nc, drawFrog            ; no need to change third
+                jr      nc, moveFrog            ; no need to change third
                 ld      a, h                    ; handle third wrap
                 add     a, %1000                ; move to next third
                 ld      h, a
-                jr      drawFrog
+                jr      moveFrog
 testOKey:
                 bit     2, d                    ; test O key
                 jr      z, testPKey             ; if not pressed, test P key
+                push    hl                      ; save original frog position
                 dec     hl                      ; move frog left (decrease hl by 1)
-                jr      drawFrog
+                jr      moveFrog
 testPKey:
                 bit     3, d                    ; test P key
                 jr      z, scanKeysLoop         ; if not pressed, read keys again
+                push    hl                      ; save original frog position
                 inc     hl                      ; move frog right (increase hl by 1)
-                jr      drawFrog
-drawFrog:
+moveFrog:
+                ex      (sp), hl                ; get original frog position, save new frog position on stack
+                call    clrspr                  ; clear sprite routine
+                pop     hl                      ; get new frog position
+
                 ld      de, frog_up             ; up frog shape
                 push    hl
                 call    drwspr                  ; draw sprite routine
