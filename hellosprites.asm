@@ -54,10 +54,16 @@ testAKey:
 testOKey:
                 bit     2, d                    ; test O key
                 jr      z, testPKey             ; if not pressed, test another key
+                ld      a, SCREEN_LEFT          ; check left boundary
+                call    CheckLeft
+                jr      z, testPKey             ; if reached, skip moving left
                 dec     hl                      ; move frog left (decrease hl by 1)
 testPKey:
                 bit     3, d                    ; test P key
                 jr      z, testPositionChanged  ; if not pressed, go further
+                ld      a, SCREEN_RIGHT         ; check right boundary
+                call    CheckRight
+                jr      z, testPositionChanged  ; if reached, skip moving right
                 inc     hl                      ; move frog right (increase hl by 1)
 
 testPositionChanged:
@@ -97,6 +103,12 @@ exit:
 SCREEN_TOP      EQU     %00$001$000
 SCREEN_BOTTOM   EQU     %10$111$000
 
+; analogously, left limit will be 0 (first character column)
+; and right limit the last but one character column
+
+;;;;;;;;;;;;;;;;;;;;;;;; 000$CCCCC
+SCREEN_LEFT     EQU     %000$00000
+SCREEN_RIGHT    EQU     %000$11110
 
                 include "system_routines.asm"
                 include "sprite_routines.asm"
